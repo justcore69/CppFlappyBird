@@ -12,6 +12,7 @@ public:
     Bird();
     void update();
     void jump();
+    void drawSelf();
     void kill();
 };
 

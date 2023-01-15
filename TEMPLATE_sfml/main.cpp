@@ -14,10 +14,12 @@ sf::Text scoreText  = sf::Text();
 
 void drawPillars(sf::RenderWindow &_window);
 void updatePillars();
+void calculatePillarsCollision(Bird &_bird);
+void restart(sf::RenderWindow& _window, Bird& _bird);
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT), "SlappySquare | by @JustAnCore (github)");
     window.setVerticalSyncEnabled(true);
 
     for (int i = 0; i < 2; i++) {
@@ -37,17 +39,25 @@ int main()
     { 
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code = sf::Keyboard::Space) {
+            switch (event.type)
+            {
+            case sf::Event::Closed:
+                window.close();
+                break;
+            case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::Space) {
                     bird.jump();
                 }
+                if (event.key.code == sf::Keyboard::R) {
+                    restart(window, bird);
+                }
+                break;
             }
-
-            if (event.type == sf::Event::Closed) { window.close(); }
         }
         
         bird.update();
         updatePillars();
+        calculatePillarsCollision(bird);
         
         window.clear();
 
@@ -72,5 +82,20 @@ void updatePillars() {
 void drawPillars(sf::RenderWindow &_window) {
     for (int i = 0; i < pillars.size(); i++) {
         _window.draw(pillars[i]);
+        _window.draw(pillars[i].secondPillar);
     }
+}
+
+void calculatePillarsCollision(Bird &_bird) {
+    for (int i = 0; i < pillars.size(); i++) {
+        pillars[i].calculateCollision(_bird);
+    }
+}
+
+void restart(sf::RenderWindow& _window, Bird& _bird) {
+    _window.clear();
+    _bird.setPosition(_bird.getPosition().x, Game::WINDOW_HEIGHT / 2);
+
+    _bird.isKilled = false;
+    Game::GAMEOVER = false;
 }

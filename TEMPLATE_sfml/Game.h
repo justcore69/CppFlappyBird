@@ -1,4 +1,6 @@
 #pragma once
+#include <SFML/Graphics.hpp>
+
 class Game
 {
 public:
@@ -12,7 +14,8 @@ public:
 	static int SCORE;
 	static int HIGH_SCORE;
 
-	Game();
+	static bool GAMEOVER;
 
+	Game();
 };
 
