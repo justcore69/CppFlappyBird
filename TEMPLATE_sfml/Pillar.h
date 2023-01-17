@@ -6,6 +6,7 @@
 class Pillar : public sf::RectangleShape
 {
 public:
+	sf::Vector2f startPosition;
 	sf::RectangleShape secondPillar;
 	float secondPillarOffset;
 	bool scored;

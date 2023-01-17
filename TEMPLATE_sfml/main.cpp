@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <fstream>
 #include <math.h>
 #include <vector>
 #include <string>
@@ -35,10 +36,20 @@ int main()
     sf::Font font = sf::Font();
 
     if (font.loadFromFile("arial.ttf")) {
-        scoreText.setString("Score: ");
+        scoreText.setString("[Score text]");
         scoreText.setFont(font);
         scoreText.setCharacterSize(16);
         scoreText.setPosition(3, 8 + Game::WALLS_SIZE_Y);
+    }
+
+    std::ifstream scoreFile("highscore.ini");
+    if (scoreFile.is_open()) {
+        std::string line = "default";
+        std::getline(scoreFile, line);
+        Game::HIGH_SCORE = std::stoi(line);
+    }
+    else {
+        std::cout << "Unable to open highscore.ini | line: 50" << std::endl;
     }
 
     while (window.isOpen())
@@ -100,13 +111,32 @@ void calculatePillarsCollision(Bird &_bird) {
 }
 
 void updateScore() {
-    std::string _s = "Score: " + std::to_string(Game::SCORE);
+    std::string _s = "Score: " + std::to_string(Game::SCORE) + "  Highscore: " + std::to_string(Game::HIGH_SCORE);
     scoreText.setString(_s);
 }
 
 void restart(sf::RenderWindow& _window, Bird& _bird) {
     _window.clear();
     _bird.setPosition(_bird.getPosition().x, Game::WINDOW_HEIGHT / 2);
+    _bird.velocity = 0;
+
+    for (int i = 0; i < pillars.size(); i++) {
+        pillars[i].setPosition(pillars[i].startPosition);
+    }
+
+    if (Game::SCORE > Game::HIGH_SCORE) {
+        Game::HIGH_SCORE = Game::SCORE;
+
+        std::ofstream scoreFile("highscore.ini");
+        if (scoreFile.is_open()) {
+            scoreFile << Game::HIGH_SCORE;
+            scoreFile.close();
+        }
+        else {
+            std::cout << "Unable to open highscore.ini | line: 130" << std::endl;
+        }
+
+    }
 
     _bird.isKilled = false;
     Game::GAMEOVER = false;
