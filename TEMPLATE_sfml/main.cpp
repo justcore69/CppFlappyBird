@@ -28,11 +28,14 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT), "SlappySquare | by @JustAnCore (github)");
     window.setVerticalSyncEnabled(true);
+    sf::Clock restartClock;
+    restartClock.restart();
 
     for (int i = 0; i < 2; i++) {
         pillars.push_back(Pillar(i * Game::WINDOW_WIDTH/2));
     }
 
+    //Set up the UI
     sf::Font font = sf::Font();
 
     if (font.loadFromFile("arial.ttf")) {
@@ -42,6 +45,7 @@ int main()
         scoreText.setPosition(3, 8 + Game::WALLS_SIZE_Y);
     }
 
+    //Load highscore from file
     std::ifstream scoreFile("highscore.ini");
     if (scoreFile.is_open()) {
         std::string line = "default";
@@ -52,8 +56,16 @@ int main()
         std::cout << "Unable to open highscore.ini | line: 50" << std::endl;
     }
 
+    // GAME LOOP //
     while (window.isOpen())
     { 
+        //Debug
+        std::cout << "\nGAMEOVER: " + std::to_string((int)Game::GAMEOVER) << std::endl;
+        std::cout << "GAME_STARTED: " + std::to_string((int)Game::GAME_STARTED) << std::endl;
+        std::cout << "CAN_RESTART: " + std::to_string((int)Game::CAN_RESTART) << std::endl;
+        std::cout << "Restart clock: " + std::to_string(restartClock.getElapsedTime().asSeconds()) << std::endl;
+
+        //Event listener
         sf::Event event;
         while (window.pollEvent(event)) {
             switch (event.type)
@@ -63,7 +75,9 @@ int main()
                 break;
             case sf::Event::KeyPressed:
                 if (event.key.code == sf::Keyboard::Space) {
-                    bird.jump();
+                    if (!Game::GAME_STARTED) Game::GAME_STARTED = true;
+                    if (Game::CAN_RESTART) restart(window, bird);
+                    else bird.jump();
                 }
                 if (event.key.code == sf::Keyboard::R) {
                     restart(window, bird);
@@ -72,12 +86,25 @@ int main()
             }
         }
 
+        if (Game::GAMEOVER) 
+        {
+            if (restartClock.getElapsedTime().asSeconds() >= 1.5) {
+                Game::CAN_RESTART = true;
+                restartClock.restart();
+            }
+        }
+        else {
+            restartClock.restart();
+        }
+
+        //Update
         bird.update();
         updatePillars();
         calculatePillarsCollision(bird);
         walls.update();
         updateScore();
         
+        //Draw
         window.clear();
 
         window.draw(bird);
@@ -126,6 +153,7 @@ void restart(sf::RenderWindow& _window, Bird& _bird) {
 
     if (Game::SCORE > Game::HIGH_SCORE) {
         Game::HIGH_SCORE = Game::SCORE;
+        Game::SCORE = 0;
 
         std::ofstream scoreFile("highscore.ini");
         if (scoreFile.is_open()) {
@@ -137,6 +165,9 @@ void restart(sf::RenderWindow& _window, Bird& _bird) {
         }
 
     }
+
+    Game::CAN_RESTART = false;
+    Game::GAME_STARTED = false;
 
     _bird.isKilled = false;
     Game::GAMEOVER = false;

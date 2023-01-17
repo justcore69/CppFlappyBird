@@ -10,4 +10,6 @@ int Game::WALLS_SIZE_Y = 16;
 int Game::SCORE = 0;
 int Game::HIGH_SCORE = 0;
 
+bool Game::GAME_STARTED = false;
 bool Game::GAMEOVER = false;
+bool Game::CAN_RESTART = false;

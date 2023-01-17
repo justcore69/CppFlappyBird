@@ -26,21 +26,22 @@ Pillar::Pillar(float _offsetX) {
 }
 
 void Pillar::update() {
-
 	//graphics
 	setFillColor(sf::Color::Black);
 	setOutlineThickness(2);
 	setOutlineColor(sf::Color::White);
-
-	//move
-	if(!Game::GAMEOVER)setPosition(sf::Vector2f(getPosition().x - Game::SCREEN_SPEED, getPosition().y));
-	if (getPosition().x <= 0) toRight();
 
 	//second pillar
 	secondPillar.setPosition(getPosition().x, getPosition().y + secondPillarOffset);
 	secondPillar.setFillColor(getFillColor());
 	secondPillar.setOutlineThickness(getOutlineThickness());
 	secondPillar.setOutlineColor(getOutlineColor());
+
+	if (!Game::GAME_STARTED) return;
+
+	//move
+	if(!Game::GAMEOVER)setPosition(sf::Vector2f(getPosition().x - Game::SCREEN_SPEED, getPosition().y));
+	if (getPosition().x <= 0) toRight();
 }
 
 void Pillar::toRight() {
@@ -90,7 +91,7 @@ void Pillar::calculateCollision(Bird &_bird) {
 	}
 
 	//Add score if pillar was passed by player
-	std::cout << std::to_string(roundf(getPosition().x)) + " " + std::to_string(roundf(_bird.getPosition().x)) << std::endl;
+	//std::cout << std::to_string(roundf(getPosition().x)) + " " + std::to_string(roundf(_bird.getPosition().x)) << std::endl;
 	if (getPosition().x <= roundf(_bird.getPosition().x) && !scored) {
 		Game::SCORE++;
 		if(Game::SCORE > Game::HIGH_SCORE) Game::HIGH_SCORE = Game::SCORE;

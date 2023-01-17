@@ -19,6 +19,8 @@ void Bird::update() {
         setOutlineColor(sf::Color::White);
     }
 
+    if (!Game::GAME_STARTED) return;
+
     //gravity
     if (velocity > 0) velocity += 0.15f;
     else velocity += 0.08f;

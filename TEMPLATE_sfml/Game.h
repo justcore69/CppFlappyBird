@@ -16,8 +16,8 @@ public:
 	static int SCORE;
 	static int HIGH_SCORE;
 
+	static bool GAME_STARTED;
 	static bool GAMEOVER;
-
-	Game();
+	static bool CAN_RESTART;
 };
 
