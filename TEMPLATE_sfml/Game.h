@@ -9,6 +9,8 @@ public:
 
 	static float SCREEN_SPEED;
 
+	static int WALLS_SIZE_Y;
+
 	static float TIME;
 
 	static int SCORE;

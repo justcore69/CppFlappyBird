@@ -24,19 +24,19 @@ void Bird::update() {
     else velocity += 0.08f;
 
     //move
-    if (getPosition().y < Game::WINDOW_HEIGHT - 16 && getPosition().y > 16) {
+    if (getPosition().y < Game::WINDOW_HEIGHT - (16 + Game::WALLS_SIZE_Y) && getPosition().y > 16 + Game::WALLS_SIZE_Y) {
         setPosition(sf::Vector2f(getPosition().x, getPosition().y + velocity));
     }
-    else if (getPosition().y >= Game::WINDOW_HEIGHT - 16) {
+    else if (getPosition().y >= Game::WINDOW_HEIGHT - (16 + Game::WALLS_SIZE_Y)) {
         velocity = 0;
     }
-    else if (getPosition().y <= 16) {
+    else if (getPosition().y <= 16 + Game::WALLS_SIZE_Y) {
         velocity = std::fmax(velocity, 0.0);
         setPosition(sf::Vector2f(getPosition().x, getPosition().y + velocity));
     }
 
-    //check collision
-    if (getPosition().y <= 16 || getPosition().y >= Game::WINDOW_HEIGHT - 16) { //with floor and roof
+    //check collision with walls (not pillars)
+    if (getPosition().y <= 16 + Game::WALLS_SIZE_Y || getPosition().y >= Game::WINDOW_HEIGHT - (16 + Game::WALLS_SIZE_Y)) { //with floor and roof
         if(!isKilled) kill();
     }
 }

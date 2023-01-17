@@ -5,10 +5,13 @@
 #include "Game.h"
 #include "Bird.h"
 #include "Pillar.h"
+#include "Walls.h"
 
 Bird bird = Bird();
 
 std::vector<Pillar> pillars;
+
+Walls walls = Walls();
 
 sf::Text scoreText  = sf::Text();
 
@@ -58,11 +61,13 @@ int main()
         bird.update();
         updatePillars();
         calculatePillarsCollision(bird);
+        walls.update();
         
         window.clear();
 
         window.draw(bird);
         drawPillars(window);
+        walls.drawSelf(window);
         window.draw(scoreText);
 
         window.display();
