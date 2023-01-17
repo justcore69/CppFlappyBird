@@ -10,7 +10,7 @@ Pillar::Pillar(float _offsetX) {
 	setSize(sf::Vector2f(32, 512));
 
 	srand(time(nullptr));
-	float _offsetY = (rand() % 129 * 1.5f) - 64 * 1.5f;
+	float _offsetY = (rand() % 100) - 64;
 	//float _offsetY = 0;
 
 	secondPillar = sf::RectangleShape();
@@ -46,7 +46,7 @@ void Pillar::update() {
 
 void Pillar::toRight() {
 	srand(time(nullptr));
-	float _offsetY = (rand() % 129 * 1.5f) - 64 * 1.5f;
+	float _offsetY = (rand() % 129) - 64;
 	//float _offsetY = 0;
 
 	setPosition(sf::Vector2f(Game::WINDOW_WIDTH, (Game::WINDOW_HEIGHT / 2) + _offsetY));

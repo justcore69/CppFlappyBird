@@ -52,10 +52,6 @@ void Bird::jump() {
     if (velocity < -6) velocity = -6;
 }
 
-void Bird::drawSelf() {
-
-}
-
 void Bird::kill() {
     isKilled = true;
     Game::GAMEOVER = true;
