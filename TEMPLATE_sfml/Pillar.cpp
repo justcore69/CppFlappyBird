@@ -1,6 +1,7 @@
 #include <cstdlib> // for rand() and srand()
 #include <ctime>   // for time()
 #include <vector>
+#include <iostream>
 
 #include "Pillar.h"
 #include "Game.h"
@@ -9,11 +10,12 @@ Pillar::Pillar(float _offsetX) {
 	setSize(sf::Vector2f(32, 512));
 
 	srand(time(nullptr));
-	float _offsetY = (rand() % 129*2) - 40*2;
+	float _offsetY = (rand() % 129 * 1.5f) - 64 * 1.5f;
 	//float _offsetY = 0;
 
 	secondPillar = sf::RectangleShape();
 	secondPillarOffset = 128;
+	scored = false;
 
 	setPosition(sf::Vector2f(Game::WINDOW_WIDTH + _offsetX, (Game::WINDOW_HEIGHT / 2) + _offsetY - secondPillarOffset/2));
 
@@ -42,10 +44,12 @@ void Pillar::update() {
 
 void Pillar::toRight() {
 	srand(time(nullptr));
-	float _offsetY = (rand() % 129*2) - 40*2;
+	float _offsetY = (rand() % 129 * 1.5f) - 64 * 1.5f;
 	//float _offsetY = 0;
 
 	setPosition(sf::Vector2f(Game::WINDOW_WIDTH, (Game::WINDOW_HEIGHT / 2) + _offsetY));
+
+	scored = false;
 }
 
 void Pillar::calculateCollision(Bird &_bird) {
@@ -82,5 +86,11 @@ void Pillar::calculateCollision(Bird &_bird) {
 				_bird.kill();
 			}
 		}
+	}
+
+	std::cout << std::to_string(roundf(getPosition().x)) + " " + std::to_string(roundf(_bird.getPosition().x)) << std::endl;
+	if (getPosition().x <= roundf(_bird.getPosition().x) && !scored) {
+		Game::SCORE++;
+		scored = true;
 	}
 }

@@ -7,8 +7,6 @@ float Game::SCREEN_SPEED = 1.8f;
 
 int Game::WALLS_SIZE_Y = 16;
 
-float Game::TIME = 0;
-
 int Game::SCORE = 0;
 int Game::HIGH_SCORE = 0;
 

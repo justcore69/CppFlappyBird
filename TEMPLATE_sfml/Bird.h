@@ -5,7 +5,6 @@
 
 class Bird : public sf::RectangleShape {
 public:
-
     float velocity = 0;
     bool isKilled = false;
 

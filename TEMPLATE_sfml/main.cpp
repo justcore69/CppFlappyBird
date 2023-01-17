@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include <math.h>
 #include <vector>
+#include <string>
 
 #include "Game.h"
 #include "Bird.h"
@@ -17,6 +19,7 @@ sf::Text scoreText  = sf::Text();
 
 void drawPillars(sf::RenderWindow &_window);
 void updatePillars();
+void updateScore();
 void calculatePillarsCollision(Bird &_bird);
 void restart(sf::RenderWindow& _window, Bird& _bird);
 
@@ -32,10 +35,10 @@ int main()
     sf::Font font = sf::Font();
 
     if (font.loadFromFile("arial.ttf")) {
-        scoreText.setString("Score: " + Game::SCORE);
+        scoreText.setString("Score: ");
         scoreText.setFont(font);
         scoreText.setCharacterSize(16);
-        scoreText.setPosition(3, 3);
+        scoreText.setPosition(3, 8 + Game::WALLS_SIZE_Y);
     }
 
     while (window.isOpen())
@@ -57,11 +60,12 @@ int main()
                 break;
             }
         }
-        
+
         bird.update();
         updatePillars();
         calculatePillarsCollision(bird);
         walls.update();
+        updateScore();
         
         window.clear();
 
@@ -71,8 +75,6 @@ int main()
         window.draw(scoreText);
 
         window.display();
-
-        Game::TIME+=0.1f;
     }
 
     return 0;
@@ -95,6 +97,11 @@ void calculatePillarsCollision(Bird &_bird) {
     for (int i = 0; i < pillars.size(); i++) {
         pillars[i].calculateCollision(_bird);
     }
+}
+
+void updateScore() {
+    std::string _s = "Score: " + std::to_string(Game::SCORE);
+    scoreText.setString(_s);
 }
 
 void restart(sf::RenderWindow& _window, Bird& _bird) {

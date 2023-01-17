@@ -8,6 +8,7 @@ class Pillar : public sf::RectangleShape
 public:
 	sf::RectangleShape secondPillar;
 	float secondPillarOffset;
+	bool scored;
 
 	void update();
 	void toRight();
